@@ -10,6 +10,8 @@ public class TouchToRotate : MonoBehaviour {
     [Inject] ICameraInput cameraInput;
     [Inject] IItemClick itemClick;
 
+    [SerializeField] List<Transform> clickArea;
+
     float itemTakeDistance = 5;
 
     //Vector2 prevPos;
@@ -71,12 +73,14 @@ public class TouchToRotate : MonoBehaviour {
                 continue;
             }
             if (results.Count > 0) {
-                if (results[0].gameObject.transform != transform) {
-                    continue;
-                }
+
+                foreach (Transform t in clickArea) {
+                    if (results[0].gameObject.transform == t) {
+                        cameraInput.cameraInvoke(Input.touches[i].deltaPosition);
+                        break;
+                    }
+                }                
             }
-            cameraInput.cameraInvoke(Input.touches[i].deltaPosition);
-            break;
         }
     }
 }
